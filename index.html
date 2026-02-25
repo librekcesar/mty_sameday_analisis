@@ -50,7 +50,7 @@
 </head>
 <body>
 
-    <div id="map-title">Densidad de entregas por código postal para expansión de SameDay</div>
+    <div id="map-title">Cantidad de entregas por código postal para expansión de SameDay</div>
     <div id="map"></div>
 
     <div id="map-legend">
@@ -87,6 +87,7 @@
     <script src="state_Nuevo_Leon_copia.js"></script>
     <script src="state_Nuevo_Leon_copia2.js"></script>
     <script src="state_Nuevo_Leon_copia3.js"></script>
+    <script src="samday_mty_copia.js"></script>
     
 
     <script>
@@ -131,6 +132,28 @@
         var layerGroup = L.geoJSON(mty1, {
             style: function(f) {
                 return { fillColor: getColorStation(f.properties.station_code), weight: 1, color: 'black', fillOpacity: 0.4 };
+            },
+            onEachFeature: function(f, l) {
+                l.bindPopup("Estación: " + f.properties.station_code);
+            }
+        }).addTo(map);
+
+
+
+         //CPS ADICIONALES: 
+
+        
+        function getColorStation2(s) {
+            var stations = {
+                'SI': '#1486c8' 
+                
+            };
+            return stations[s] || '#gray';
+        }
+
+        var layerGroup5 = L.geoJSON(sameday, {
+            style: function(f) {
+                return { fillColor: getColorStation2(f.properties.decision), weight: 1, color: 'black', fillOpacity: 0.4 };
             },
             onEachFeature: function(f, l) {
                 l.bindPopup("Estación: " + f.properties.station_code);
@@ -218,7 +241,8 @@
             "Ubicación de estación": centroLayer,
             "División de estaciones": layerGroup,
             "Densidad de entregas (paq/km2)": layerGroup2,
-            "Tiempo de desplazamiento": layerGroup3
+            "Tiempo de desplazamiento": layerGroup3,
+            "Códigos postales para SameDay": layerGroup5
             
         };
         L.control.layers(null, overlayMaps, { collapsed: false }).addTo(map);
